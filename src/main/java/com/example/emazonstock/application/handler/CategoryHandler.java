@@ -20,7 +20,7 @@ public class CategoryHandler {
 
         Category category = categoryMapper.requestToModel(categoryRequest);
         categoryService.saveCategory(category);
-        
+
     }
 
 }
