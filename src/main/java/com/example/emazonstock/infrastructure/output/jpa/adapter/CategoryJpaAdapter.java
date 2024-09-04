@@ -7,7 +7,12 @@ import com.example.emazonstock.infrastructure.output.jpa.mapper.CategoryEntityMa
 import com.example.emazonstock.infrastructure.output.jpa.repository.CategoryRepository;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -24,5 +29,16 @@ public class CategoryJpaAdapter implements ICategoryPersistencePort {
     @Override
     public Optional<Category> findByName(String name) {
         return categoryRepository.findByName(name).map(categoryEntityMapper::entityToModel);
+    }
+
+    @Override
+    public List<Category> findAllCategories(int page, int size, boolean asc) {
+
+        Sort sort = asc ? Sort.by("name").ascending() : Sort.by("name").descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<CategoryEntity> categoryEntityPage = categoryRepository.findAll(pageable);
+        List<Category> categoryList = categoryEntityMapper.entityToModelList(categoryEntityPage.getContent());
+
+        return categoryList;
     }
 }

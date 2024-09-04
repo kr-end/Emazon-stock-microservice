@@ -20,5 +20,4 @@ public class CategoryRequest {
     @Size(max = 90, message = "Description max length is 90")
     private String description;
 
-
 }
